@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "feeding_plans",
+  "info": {
+    "singularName": "feeding-plan",
+    "pluralName": "feeding-plans",
+    "displayName": "FeedingPlan"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "pet": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::pet.pet"
+    }
+  }
+}

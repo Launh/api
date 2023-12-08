@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pet_health_entries",
+  "info": {
+    "singularName": "pet-health",
+    "pluralName": "pet-health-entries",
+    "displayName": "PetHealth",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "date": {
+      "type": "datetime"
+    },
+    "note": {
+      "type": "richtext"
+    },
+    "pet": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::pet.pet"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

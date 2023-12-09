@@ -658,11 +658,9 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >
-    user_profile: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::user-profile.user-profile'
-    >
+    avatar: Attribute.Media
+    timeZone: Attribute.String
+    phone: Attribute.String
     createdAt: Attribute.DateTime
     updatedAt: Attribute.DateTime
     createdBy: Attribute.Relation<
@@ -899,48 +897,6 @@ export interface ApiToDoEntryToDoEntry extends Schema.CollectionType {
   }
 }
 
-export interface ApiUserProfileUserProfile extends Schema.CollectionType {
-  collectionName: 'user_profiles'
-  info: {
-    singularName: 'user-profile'
-    pluralName: 'user-profiles'
-    displayName: 'UserProfile'
-    description: ''
-  }
-  options: {
-    draftAndPublish: false
-  }
-  attributes: {
-    name: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1
-      }>
-    avatar: Attribute.Media
-    timeZone: Attribute.String
-    phone: Attribute.String
-    user: Attribute.Relation<
-      'api::user-profile.user-profile',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >
-    createdAt: Attribute.DateTime
-    updatedAt: Attribute.DateTime
-    createdBy: Attribute.Relation<
-      'api::user-profile.user-profile',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private
-    updatedBy: Attribute.Relation<
-      'api::user-profile.user-profile',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private
-  }
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -953,16 +909,15 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission
       'plugin::upload.file': PluginUploadFile
       'plugin::upload.folder': PluginUploadFolder
-      'plugin::i18n.locale': PluginI18NLocale
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission
       'plugin::users-permissions.role': PluginUsersPermissionsRole
       'plugin::users-permissions.user': PluginUsersPermissionsUser
+      'plugin::i18n.locale': PluginI18NLocale
       'api::feeding-plan.feeding-plan': ApiFeedingPlanFeedingPlan
       'api::pet.pet': ApiPetPet
       'api::pet-health.pet-health': ApiPetHealthPetHealth
       'api::to-do.to-do': ApiToDoToDo
       'api::to-do-entry.to-do-entry': ApiToDoEntryToDoEntry
-      'api::user-profile.user-profile': ApiUserProfileUserProfile
     }
   }
 }

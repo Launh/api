@@ -4,4 +4,6 @@
 
 import { factories } from '@strapi/strapi';
 
-export default factories.createCoreRouter('api::to-do-entry.to-do-entry');
+export default factories.createCoreRouter('api::to-do-entry.to-do-entry', {
+  only: ['delete', 'find', 'findOne', 'update'],
+});

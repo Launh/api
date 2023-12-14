@@ -1,12 +1,30 @@
 {
+  "name": "launh-api",
+  "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
-    "start": "vercel dev",
-    "deploy": "vercel"
+    "start": "vercel dev --listen 5005 --cwd public",
+    "build": "node ./build.mjs",
+    "build:dev": "esbuild api/index.ts --outfile=dist/api/index.js --platform=node --bundle --watch",
+    "deploy": "vercel",
+    "serve": "NODE_ENV=development nodemon --watch 'dist/*' dist/api/index.js",
+    "dev": "concurrently \"yarn build:dev\" \"yarn serve\"",
+    "prisma:generate": "prisma generate --no-engine",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "@prisma/extension-accelerate": "^0.6.2",
+    "@supabase/supabase-js": "^2.39.0",
     "hono": "^3.11.7"
   },
   "devDependencies": {
+    "@hono/node-server": "^1.3.3",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.9",
+    "nodemon": "^3.0.2",
+    "prisma": "^5.7.0",
     "vercel": "^32.4.1"
   }
 }

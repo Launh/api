@@ -111,5 +111,8 @@ exports
 *.cache
 dist
 build
+public
 .strapi-updater.json
 .strapi
+.vercel
+.env*.local

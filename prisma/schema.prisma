@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum RoleKind {
+  USER
+  ADMIN
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  permissions String[]
+  kind        RoleKind @default(USER)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  // user        User[]
+
+  @@map("roles")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  // role       Role         @relation(fields: [roleId], references: [id])
+  // roleId     Int
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  profile    Profile?
+  pet        Pet[]
+  healthNote HealthNote[]
+  toDo       ToDo[]
+  toDoEntry  ToDoEntry[]
+
+  @@map("users")
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  avatar    String?
+  timeZone  String?
+  phone     String?
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model Pet {
+  id         Int          @id @default(autoincrement())
+  name       String
+  photo      String?
+  sex        String?
+  breed      String?
+  dob        DateTime
+  chipId     String?
+  user       User         @relation(fields: [userId], references: [id])
+  userId     Int
+  healthNote HealthNote[]
+  toDo       ToDo[]
+  toDoEntry  ToDoEntry[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@map("pets")
+}
+
+model HealthNote {
+  id     Int      @id @default(autoincrement())
+  date   DateTime
+  note   String
+  pet    Pet      @relation(fields: [petId], references: [id])
+  petId  Int
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@map("health_notes")
+}
+
+enum ToDoIntervalType {
+  DAY
+  MONTH
+  YEAR
+}
+
+enum ToDoCategory {
+  FOOD_PURCHASE
+  DEWORMING
+  DEFLEA
+  VACCINATION
+  GROOMING
+  WATER_FOUNTAIN_CLEANING
+  CAT_LITTER_PURCHASE
+  CAT_LITTER_REFILL
+  CUSTOM_REMINDER
+}
+
+model ToDo {
+  id             Int              @id @default(autoincrement())
+  date           DateTime
+  pet            Pet              @relation(fields: [petId], references: [id])
+  petId          Int
+  category       String
+  interval_type  ToDoIntervalType
+  interval_value Int
+  reminder       Boolean
+  note           String
+  user           User             @relation(fields: [userId], references: [id])
+  userId         Int
+  toDoEntry      ToDoEntry[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@map("to_dos")
+}
+
+model ToDoEntry {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  completed Boolean
+  due       DateTime
+  pet       Pet      @relation(fields: [petId], references: [id])
+  petId     Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  toDo      ToDo     @relation(fields: [toDoId], references: [id])
+  toDoId    Int
+  category  String
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("to_do_entries")
+}
